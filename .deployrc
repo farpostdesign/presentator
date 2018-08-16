@@ -1,0 +1,14 @@
+NAME=presentator
+
+set -e
+
+docker build -rm -t $NAME .
+docker stop || echo "no running container $(NAME)"
+docker rm || echo "container $(NAME) already removed"
+
+docker run \
+  --detach \
+  --volume /data/presenter/logs:/var/log/apache2 \
+  --link mariadb10:db \
+  --name $NAME \
+  $NAME
